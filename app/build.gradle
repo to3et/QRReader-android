@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    defaultConfig {
+        applicationId "com.example.to3et.qrreader"
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = false
+    }
+}
+
+dependencies {
+    implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.android.support:design:${versions.supportLibrary}"
+
+    implementation "com.android.support.constraint:constraint-layout:${versions.constraint}"
+    implementation 'com.android.support:support-v4:26.1.0'
+    testImplementation "junit:junit:${versions.junit}"
+    androidTestImplementation "com.android.support.test:runner:${versions.runner}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${versions.espresso}"
+
+    implementation "com.github.hotchemi:permissionsdispatcher:${versions.permissionsdispatcher}"
+    kapt "com.github.hotchemi:permissionsdispatcher-processor:${versions.permissionsdispatcher}"
+
+    implementation "com.journeyapps:zxing-android-embedded:${versions.zxing}"
+
+    implementation "android.arch.lifecycle:extensions:${versions.lifecycle}"
+    annotationProcessor "android.arch.lifecycle:compiler:${versions.lifecycle}"
+
+    implementation "android.arch.persistence.room:runtime:${versions.room}"
+    annotationProcessor "android.arch.persistence.room:compiler:${versions.room}"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+}
+repositories {
+    mavenCentral()
+}
