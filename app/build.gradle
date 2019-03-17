@@ -11,7 +11,7 @@ android {
         targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -20,32 +20,45 @@ android {
         }
     }
     dataBinding {
-        enabled = false
+        enabled = true
     }
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
-    implementation "com.android.support:design:${versions.supportLibrary}"
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
 
-    implementation "com.android.support.constraint:constraint-layout:${versions.constraint}"
-    implementation 'com.android.support:support-v4:26.1.0'
+    // support libs
+    implementation "androidx.appcompat:appcompat:${versions.supportLibrary}"
+    implementation "com.google.android.material:material:${versions.supportLibrary}"
+    implementation "androidx.legacy:legacy-support-v4:${versions.supportLibrary}"
+
+    // support libs
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
     testImplementation "junit:junit:${versions.junit}"
-    androidTestImplementation "com.android.support.test:runner:${versions.runner}"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "androidx.test:runner:${versions.runner}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
+    // permissions dispatcher
     implementation "com.github.hotchemi:permissionsdispatcher:${versions.permissionsdispatcher}"
     kapt "com.github.hotchemi:permissionsdispatcher-processor:${versions.permissionsdispatcher}"
 
+    // zxing
     implementation "com.journeyapps:zxing-android-embedded:${versions.zxing}"
 
-    implementation "android.arch.lifecycle:extensions:${versions.lifecycle}"
-    annotationProcessor "android.arch.lifecycle:compiler:${versions.lifecycle}"
+    // architecture components
+    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
+    kapt "androidx.lifecycle:lifecycle-compiler:${versions.lifecycle}"
 
-    implementation "android.arch.persistence.room:runtime:${versions.room}"
-    annotationProcessor "android.arch.persistence.room:compiler:${versions.room}"
+    // room
+    implementation "androidx.room:room-runtime:${versions.room}"
+    kapt "androidx.room:room-compiler:${versions.room}"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    // dagger
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 }
 repositories {
     mavenCentral()

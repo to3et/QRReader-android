@@ -4,8 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -28,7 +28,13 @@ class QRReaderActivity : AppCompatActivity() {
         mQRReaderView.decodeSingle(object: BarcodeCallback {
             override fun barcodeResult(result: BarcodeResult?) {
                 result ?: return
-//                mResultView.text = result.text
+
+                val fragmentTransaction = supportFragmentManager.beginTransaction()
+                fragmentTransaction.add(
+                        R.id.contentFrame,
+                        BarcodeResultFragment.newInstance(result.text),
+                        "BarcodeResultFragment")
+                fragmentTransaction.commit()
             }
             override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
 
@@ -41,6 +47,10 @@ class QRReaderActivity : AppCompatActivity() {
         resumeCameraWithPermissionCheck()
     }
 
+    private fun stopCamera() {
+        mQRReaderView.pause()
+    }
+
     override fun onPause() {
         super.onPause()
         stopCamera()
@@ -49,10 +59,6 @@ class QRReaderActivity : AppCompatActivity() {
     @NeedsPermission(Manifest.permission.CAMERA)
     fun resumeCamera() {
         mQRReaderView.resume()
-    }
-
-    private fun stopCamera() {
-        mQRReaderView.pause()
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
