@@ -6,6 +6,9 @@ import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
+import com.example.to3et.qrreader.databinding.ActivityQrreaderBinding
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -14,32 +17,27 @@ import permissions.dispatcher.*
 
 @RuntimePermissions
 class QRReaderActivity : AppCompatActivity() {
-
     private lateinit var mQRReaderView: DecoratedBarcodeView
+
+    private val viewModel: QRReaderViewModel by lazy {
+        ViewModelProviders.of(this).get(QRReaderViewModel::class.java)
+    }
+
+    private val binding by lazy {
+        DataBindingUtil.setContentView<ActivityQrreaderBinding>(this, R.layout.activity_qrreader)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_qrreader)
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        mQRReaderView = findViewById(R.id.decoratedBarcodeView)
-        mQRReaderView.decodeSingle(object: BarcodeCallback {
-            override fun barcodeResult(result: BarcodeResult?) {
-                result ?: return
+        findOrCreateBarcodeResultFragment()
 
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.add(
-                        R.id.contentFrame,
-                        BarcodeResultFragment.newInstance(result.text),
-                        "BarcodeResultFragment")
-                fragmentTransaction.commit()
-            }
-            override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
-
-            }
-        })
+        setupCamera()
     }
 
     override fun onResume() {
@@ -47,13 +45,48 @@ class QRReaderActivity : AppCompatActivity() {
         resumeCameraWithPermissionCheck()
     }
 
-    private fun stopCamera() {
-        mQRReaderView.pause()
-    }
-
     override fun onPause() {
         super.onPause()
-        stopCamera()
+        pauseCamera()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        var fragment  = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
+        if (fragment == null || !fragment.isVisible ) {
+            finish()
+        } else {
+            viewModel.hideBarcodeResult()
+        }
+    }
+
+    private fun findOrCreateBarcodeResultFragment() {
+        var fragment = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
+        if (fragment == null) {
+            supportFragmentManager.beginTransaction()
+                    .replace(
+                            R.id.contentFrame,
+                            BarcodeResultFragment.newInstance(),
+                            BarcodeResultFragment.TAG)
+                    .commit()
+        }
+    }
+
+    private fun setupCamera() {
+        mQRReaderView = findViewById(R.id.decoratedBarcodeView)
+        mQRReaderView.decodeSingle(object: BarcodeCallback {
+            override fun barcodeResult(result: BarcodeResult?) {
+                result ?: return
+                viewModel.showBarcodeResult(result.text)
+                pauseCamera()
+            }
+            override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
+            }
+        })
+    }
+
+    private fun pauseCamera() {
+        mQRReaderView.pause()
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
@@ -72,7 +105,7 @@ class QRReaderActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
                 .setPositiveButton("許可") {_, _ -> request.proceed() }
                 .setNegativeButton("許可しない") {_, _ -> request.cancel()}
-                .setMessage("QRを読み取るためにカメラにアクセスする必要があります。")
+                .setMessage("カメラにアクセスする必要があります。")
                 .show()
     }
 

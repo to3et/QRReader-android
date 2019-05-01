@@ -4,48 +4,58 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.to3et.qrreader.databinding.FragmentReadViewBinding
 
 class BarcodeResultFragment : Fragment() {
-    private lateinit var viewModel: QRReaderViewModel
-    private lateinit var barcodeResult: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            barcodeResult = it.getString(ARGS_BARCODE_RESULT) ?: ""
-        }
+    private val viewModel: QRReaderViewModel by lazy {
+        ViewModelProviders.of(requireActivity()).get(QRReaderViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        viewModel = ViewModelProviders.of(this).get(QRReaderViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_read_view, container, false)
+        val binding = DataBindingUtil.inflate<FragmentReadViewBinding>(inflater,
+                R.layout.fragment_read_view,
+                container,
+                false)
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.notifyBarcodeResult(barcodeResult)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.barcodeResult.observe(this, Observer {
-            val resultView = view?.findViewById<TextView>(R.id.barcode_result_view)
-            resultView?.text = it
+        val button = view.findViewById<AppCompatButton>(R.id.button1)
+        button.setOnClickListener { v -> viewModel.copyText()}
+
+        setupClipBoard()
+        setupSnackbarText()
+    }
+
+    private fun setupClipBoard() {
+        viewModel.copyText.observe(this, Observer<String> {text ->
+            ClipBoardUtils.copyText(requireActivity(), text)
+        })
+    }
+
+    private fun setupSnackbarText() {
+        viewModel.snackbarText.observe(this, Observer<String> {text ->
+            view?.let {
+                SnackbarUtils.showSnackbar(it, text)
+            }
         })
     }
 
     companion object {
-        private const val ARGS_BARCODE_RESULT = "barcode_result"
+        const val TAG = "BarcodeResultFragment"
 
         @JvmStatic
-        fun newInstance(barcodeResult: String) =
-                BarcodeResultFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARGS_BARCODE_RESULT, barcodeResult)
-                    }
-                }
+        fun newInstance() = BarcodeResultFragment()
     }
 }
