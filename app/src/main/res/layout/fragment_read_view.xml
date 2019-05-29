@@ -3,37 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".BarcodeResultFragment">
+    tools:context=".barcoderesult.BarcodeResultFragment">
 
     <data>
-        <variable name="viewmodel" type="com.example.to3et.qrreader.QRReaderViewModel"/>
+        <variable name="viewmodel" type="com.example.to3et.qrreader.barcoderesult.BarcodeResultViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFF">
+        android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/barcode_result_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:autoLink="all"
-                android:text="@{viewmodel.barcodeText}"
+                android:text="@{viewmodel.displayValue}"
                 app:layout_constraintBottom_toTopOf="@id/button1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <!--<View-->
-                <!--android:id="@+id/border"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1dp"-->
-                <!--android:background="#ff808080"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintBottom_toTopOf="@id/button1"-->
-                <!--/>-->
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button1"

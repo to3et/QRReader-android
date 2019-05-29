@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.to3et.qrreader.reader.QRReaderActivity">
+    tools:context="com.example.to3et.qrreader.barcoderesult.BarcodeResultActivity">
 
     <data>
         <import type="android.view.View" />
-        <variable name="viewmodel" type="com.example.to3et.qrreader.reader.QRReaderViewModel"/>
+        <variable name="viewmodel" type="com.example.to3et.qrreader.barcoderesult.BarcodeResultViewModel"/>
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -32,21 +32,21 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
+                    android:minHeight="?attr/actionBarSize"
                     android:theme="@style/Toolbar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-                android:id="@+id/decoratedBarcodeView"
-                android:layout_width="0dp"
+            <FrameLayout
+                android:id="@+id/contentFrame"
                 android:layout_height="0dp"
+                android:layout_width="0dp"
                 app:layout_constraintTop_toBottomOf="@id/appbar"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,4 +60,5 @@
             app:menu="@menu/drawer_actions" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
+
 </layout>

@@ -35,9 +35,6 @@ dependencies {
 
     // support libs
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
-    testImplementation "junit:junit:${versions.junit}"
-    androidTestImplementation "androidx.test:runner:${versions.runner}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 
     // permissions dispatcher
     implementation "com.github.hotchemi:permissionsdispatcher:${versions.permissionsdispatcher}"
@@ -59,7 +56,20 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+
+    // mlkit
+    implementation "com.google.firebase:firebase-core:${versions.firebase}"
+
+    // JUnit
+    testImplementation "junit:junit:${versions.junit}"
+
+    // androidTest
+    androidTestImplementation "androidx.test:runner:${versions.runner}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 }
+
+apply plugin: 'com.google.gms.google-services'
+
 repositories {
     mavenCentral()
 }

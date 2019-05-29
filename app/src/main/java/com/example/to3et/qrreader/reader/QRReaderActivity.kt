@@ -1,14 +1,17 @@
-package com.example.to3et.qrreader
+package com.example.to3et.qrreader.reader
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import com.example.to3et.qrreader.R
+import com.example.to3et.qrreader.barcoderesult.BarcodeResultActivity
+import com.example.to3et.qrreader.barcoderesult.BarcodeResultFragment
 import com.example.to3et.qrreader.databinding.ActivityQrreaderBinding
+import com.example.to3et.qrreader.model.SimpleBarcodeResult
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -32,11 +35,7 @@ class QRReaderActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        findOrCreateBarcodeResultFragment()
-
+        setSupportActionBar(binding.toolbar)
         setupCamera()
     }
 
@@ -51,8 +50,7 @@ class QRReaderActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        var fragment  = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
+        var fragment = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
         if (fragment == null || !fragment.isVisible ) {
             finish()
         } else {
@@ -60,25 +58,16 @@ class QRReaderActivity : AppCompatActivity() {
         }
     }
 
-    private fun findOrCreateBarcodeResultFragment() {
-        var fragment = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
-        if (fragment == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(
-                            R.id.contentFrame,
-                            BarcodeResultFragment.newInstance(),
-                            BarcodeResultFragment.TAG)
-                    .commit()
-        }
-    }
-
     private fun setupCamera() {
         mQRReaderView = findViewById(R.id.decoratedBarcodeView)
-        mQRReaderView.decodeSingle(object: BarcodeCallback {
+        mQRReaderView.decodeContinuous(object: BarcodeCallback {
             override fun barcodeResult(result: BarcodeResult?) {
                 result ?: return
-                viewModel.showBarcodeResult(result.text)
                 pauseCamera()
+                startActivity(
+                        BarcodeResultActivity.intent(
+                        this@QRReaderActivity,
+                                SimpleBarcodeResult(result.rawBytes, result.text)))
             }
             override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
             }

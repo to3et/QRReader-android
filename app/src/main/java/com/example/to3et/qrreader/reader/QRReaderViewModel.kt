@@ -1,4 +1,4 @@
-package com.example.to3et.qrreader
+package com.example.to3et.qrreader.reader
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

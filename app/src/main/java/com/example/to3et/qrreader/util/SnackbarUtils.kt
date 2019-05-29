@@ -1,4 +1,4 @@
-package com.example.to3et.qrreader
+package com.example.to3et.qrreader.util
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
