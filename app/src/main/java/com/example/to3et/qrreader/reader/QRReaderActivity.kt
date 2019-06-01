@@ -67,7 +67,9 @@ class QRReaderActivity : AppCompatActivity() {
                 startActivity(
                         BarcodeResultActivity.intent(
                         this@QRReaderActivity,
-                                SimpleBarcodeResult(result.rawBytes, result.text)))
+                                SimpleBarcodeResult(
+                                        result.rawBytes?: ByteArray(0),
+                                        result.text)))
             }
             override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
             }
