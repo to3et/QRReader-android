@@ -4,15 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class SimpleBarcodeResult(
-        val rawBytes: ByteArray,
         val text: String) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-            parcel.createByteArray(),
             parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeByteArray(rawBytes)
         parcel.writeString(text)
     }
 

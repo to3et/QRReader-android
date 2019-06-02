@@ -33,7 +33,7 @@ dependencies {
     implementation "com.google.android.material:material:${versions.supportLibrary}"
     implementation "androidx.legacy:legacy-support-v4:${versions.supportLibrary}"
 
-    // support libs
+    // constraintlayout
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraint}"
 
     // permissions dispatcher
@@ -47,19 +47,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
     kapt "androidx.lifecycle:lifecycle-compiler:${versions.lifecycle}"
 
-    // room
-    implementation "androidx.room:room-runtime:${versions.room}"
-    kapt "androidx.room:room-compiler:${versions.room}"
-
-    // dagger
-    implementation "com.google.dagger:dagger:${versions.dagger}"
-    implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
-    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
-
-    // mlkit
-    implementation "com.google.firebase:firebase-core:${versions.firebase}"
-
     // JUnit
     testImplementation "junit:junit:${versions.junit}"
 
@@ -67,8 +54,6 @@ dependencies {
     androidTestImplementation "androidx.test:runner:${versions.runner}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 }
-
-apply plugin: 'com.google.gms.google-services'
 
 repositories {
     mavenCentral()

@@ -5,12 +5,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import com.example.to3et.qrreader.R
 import com.example.to3et.qrreader.barcoderesult.BarcodeResultActivity
-import com.example.to3et.qrreader.barcoderesult.BarcodeResultFragment
-import com.example.to3et.qrreader.databinding.ActivityQrreaderBinding
 import com.example.to3et.qrreader.model.SimpleBarcodeResult
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
@@ -22,20 +18,11 @@ import permissions.dispatcher.*
 class QRReaderActivity : AppCompatActivity() {
     private lateinit var mQRReaderView: DecoratedBarcodeView
 
-    private val viewModel: QRReaderViewModel by lazy {
-        ViewModelProviders.of(this).get(QRReaderViewModel::class.java)
-    }
-
-    private val binding by lazy {
-        DataBindingUtil.setContentView<ActivityQrreaderBinding>(this, R.layout.activity_qrreader)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.lifecycleOwner = this
-        binding.viewmodel = viewModel
+        setContentView(R.layout.activity_qrreader)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar((findViewById(R.id.toolbar)))
         setupCamera()
     }
 
@@ -49,15 +36,6 @@ class QRReaderActivity : AppCompatActivity() {
         pauseCamera()
     }
 
-    override fun onBackPressed() {
-        var fragment = supportFragmentManager.findFragmentByTag(BarcodeResultFragment.TAG)
-        if (fragment == null || !fragment.isVisible ) {
-            finish()
-        } else {
-            viewModel.hideBarcodeResult()
-        }
-    }
-
     private fun setupCamera() {
         mQRReaderView = findViewById(R.id.decoratedBarcodeView)
         mQRReaderView.decodeContinuous(object: BarcodeCallback {
@@ -68,7 +46,6 @@ class QRReaderActivity : AppCompatActivity() {
                         BarcodeResultActivity.intent(
                         this@QRReaderActivity,
                                 SimpleBarcodeResult(
-                                        result.rawBytes?: ByteArray(0),
                                         result.text)))
             }
             override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {

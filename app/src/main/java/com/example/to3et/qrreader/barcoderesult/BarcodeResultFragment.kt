@@ -34,7 +34,7 @@ class BarcodeResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val button = view.findViewById<AppCompatButton>(R.id.button1)
+        val button = view.findViewById<AppCompatButton>(R.id.button_copy)
         button.setOnClickListener { viewModel.copyText()}
 
         setupClipBoard()
