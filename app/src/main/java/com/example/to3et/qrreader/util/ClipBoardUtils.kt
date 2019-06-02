@@ -6,11 +6,12 @@ import android.content.Context
 
 class ClipBoardUtils {
     companion object {
-        fun copyText(context : Context, text : String) {
+        fun copyText(context : Context?, text : String?) {
+            text?: return
+            context?: return
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clipdata = ClipData.newPlainText("BarcodeResultTest", text)
 
-            clipboard.primaryClip = clipdata
+            clipboard.primaryClip = ClipData.newPlainText("QRReader", text)
         }
     }
 }

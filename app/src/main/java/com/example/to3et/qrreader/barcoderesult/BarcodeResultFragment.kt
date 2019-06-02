@@ -35,24 +35,27 @@ class BarcodeResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val button = view.findViewById<AppCompatButton>(R.id.button_copy)
-        button.setOnClickListener { viewModel.copyText()}
+        button.setOnClickListener { viewModel.copyText() }
 
-        setupClipBoard()
-        setupSnackbarText()
+        subscribeToCopyText()
     }
 
-    private fun setupClipBoard() {
-        viewModel.copyText.observe(this, Observer<String> {text ->
-            ClipBoardUtils.copyText(requireActivity(), text)
-        })
-    }
+    private fun subscribeToCopyText() {
+        val activity = requireActivity()
 
-    private fun setupSnackbarText() {
-        viewModel.snackbarText.observe(this, Observer<String> {text ->
-            view?.let {
-                SnackbarUtils.showSnackbar(it, text)
-            }
-        })
+        viewModel.run {
+            copyText.observe(activity, Observer {
+                it.getContentIfNotHandled()?.let {
+                    ClipBoardUtils.copyText(context, it)
+                }
+            })
+
+            snackbarText.observe(activity, Observer {
+                it.getContentIfNotHandled()?.let {
+                    SnackbarUtils.showSnackbar(view, it)
+                }
+            })
+        }
     }
 
     companion object {
