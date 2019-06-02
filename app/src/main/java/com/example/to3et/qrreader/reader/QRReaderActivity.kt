@@ -71,9 +71,9 @@ class QRReaderActivity : AppCompatActivity() {
     @OnShowRationale(Manifest.permission.CAMERA)
     fun showRationaleForCamera(request: PermissionRequest) {
         AlertDialog.Builder(this)
-                .setPositiveButton("許可") {_, _ -> request.proceed() }
-                .setNegativeButton("許可しない") {_, _ -> request.cancel()}
-                .setMessage("カメラにアクセスする必要があります。")
+                .setTitle("確認")
+                .setPositiveButton("開始") {_, _ -> request.proceed() }
+                .setMessage("このアプリはカメラにアクセスします。\nカメラの使用を許可してください。\n")
                 .show()
     }
 
